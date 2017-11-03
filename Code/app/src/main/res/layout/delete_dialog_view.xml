@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dialog_height_big"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_small">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <edu.hust.truongvu.pdfviewer.customview.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_medium"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="@string/do_you_want_delete"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="@dimen/padding_medium"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+        <edu.hust.truongvu.pdfviewer.customview.MyButton
+            android:id="@+id/cancel_delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:textColor="#FFFFFF"
+            android:layout_gravity="bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="@dimen/margin_tiny"
+            android:text="@string/cancel"/>
+        <edu.hust.truongvu.pdfviewer.customview.MyButton
+            android:id="@+id/ok_delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/text_color_white"
+            android:background="@color/colorPrimaryDark"
+            android:layout_marginLeft="@dimen/margin_tiny"
+            android:layout_gravity="bottom"
+            android:text="@string/ok"/>
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">PDFViewer</string>
+    <string name="dialog">Dialog</string>
+    <string name="scanning_file">Đang scan các file...</string>
+    <string name="cannot_delete">Không thể xóa file ở thẻ SD card</string>
+    <string name="cannot_share">Không thể share file từ thẻ SD card</string>
+    <string name="file_delete">Đã xóa file</string>
+    <string name="do_you_want_delete">Bạn có thực sự muốn xóa file?</string>
+    <string name="name">Tên: </string>
+    <string name="size">Kích thước: </string>
+    <string name="ok">Đồng ý</string>
+    <string name="cancel">Hủy</string>
+    <string name="please_enter_number">Hãy nhập số trang</string>
+    <string name="enter_number">Nhập số trang</string>
+    <string name="jump_to">Chuyển tới</string>
+    <string name="search">Tìm kiếm</string>
+
+    <string name="switch_view">Đổi kiểu xem</string>
+    <string name="show_more_info">Xem thông tin</string>
+    <string name="share_file">Chia sẻ file</string>
+    <string name="delete_file">Xóa file</string>
+    <string name="show_all_file">Xem tất cả</string>
+    <string name="jump_to_page">Chuyển tới trang</string>
+</resources>

@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">PDFViewer</string>
+    <string name="dialog">Dialog</string>
+    <string name="scanning_file">Scanning files...</string>
+    <string name="cannot_delete">Can not delete file in your SD Card</string>
+    <string name="cannot_share">Can not share file from your SD Card</string>
+    <string name="file_delete">File deleted</string>
+    <string name="do_you_want_delete">Do you really want to delete this file?</string>
+    <string name="name">Name: </string>
+    <string name="size">Size: </string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="please_enter_number">Please enter number page</string>
+    <string name="enter_number">Enter number</string>
+    <string name="jump_to">Jump to</string>
+    <string name="search">Search</string>
+
+    <string name="switch_view">Switch views</string>
+    <string name="show_more_info">Show more info</string>
+    <string name="share_file">Share file</string>
+    <string name="delete_file">Delete file</string>
+    <string name="show_all_file">Show all file</string>
+    <string name="jump_to_page">Jump to page</string>
+</resources>
