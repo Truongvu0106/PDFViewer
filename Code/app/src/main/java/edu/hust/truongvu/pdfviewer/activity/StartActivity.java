@@ -59,6 +59,7 @@ public class StartActivity extends AppCompatActivity {
     public static final String FOLDER_TAG = "FOLDER";
     public static ArrayList<MyFile> allPDF;
     public static MyFolder folderTransfer;
+    public static String[] PERMISSIONS = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +82,9 @@ public class StartActivity extends AppCompatActivity {
 
     private void checkAndroidVersion() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            checkPermission();
+            if (MyHelper.checkPermission(PERMISSIONS, StartActivity.this) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(PERMISSIONS, REQUEST_PERMISSIONS);
+            }
         }else {
             myAsync = new MyAsync();
             myAsync.execute();
@@ -211,24 +214,22 @@ public class StartActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
         switch (requestCode) {
             case REQUEST_PERMISSIONS:
-                if (grantResults.length > 0) {
-                    boolean writeExternalFile = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                    boolean readExternalFile = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-
-                    if(writeExternalFile && readExternalFile)
-                    {
-                        myAsync = new MyAsync();
-                        myAsync.execute();
-                    } else {
-                        Toast.makeText(StartActivity.this, "Please allow permission", Toast.LENGTH_SHORT).show();
-                    }
+                if (MyHelper.checkPermission(PERMISSIONS, StartActivity.this) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(PERMISSIONS, REQUEST_PERMISSIONS);
+                }else {
+                    myAsync = new MyAsync();
+                    myAsync.execute();
                 }
                 break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
+
+
 
 
     private class MyAsync extends AsyncTask<Void, Void, ArrayList<Object>> {
@@ -258,6 +259,7 @@ public class StartActivity extends AppCompatActivity {
             }
             return listObject;
         }
+
 
         @Override
         protected void onPostExecute(final ArrayList<Object> data) {
@@ -377,4 +379,6 @@ public class StartActivity extends AppCompatActivity {
             dialog.dismiss();
         }
     }
+
+
 }

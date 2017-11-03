@@ -1,5 +1,9 @@
 package edu.hust.truongvu.pdfviewer.helper;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.support.v4.content.ContextCompat;
+
 /**
  * Created by truon on 10/20/2017.
  */
@@ -39,5 +43,13 @@ public class MyHelper {
         }
         String result  = String.valueOf(arr);
         return result;
+    }
+
+    public static int checkPermission(String[] permissions, Context context) {
+        int permissionCheck = PackageManager.PERMISSION_GRANTED;
+        for (String permission : permissions) {
+            permissionCheck += ContextCompat.checkSelfPermission(context, permission);
+        }
+        return permissionCheck;
     }
 }
