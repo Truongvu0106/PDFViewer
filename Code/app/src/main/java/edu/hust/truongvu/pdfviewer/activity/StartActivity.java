@@ -40,6 +40,7 @@ import edu.hust.truongvu.pdfviewer.adapter.MultitypeAdapter;
 import edu.hust.truongvu.pdfviewer.customview.DeleteDialog;
 import edu.hust.truongvu.pdfviewer.customview.InfomationDialog;
 import edu.hust.truongvu.pdfviewer.customview.MyActionBar;
+import edu.hust.truongvu.pdfviewer.customview.PermissionDialog;
 import edu.hust.truongvu.pdfviewer.entity.MyFile;
 import edu.hust.truongvu.pdfviewer.entity.MyFolder;
 import edu.hust.truongvu.pdfviewer.helper.MyHelper;
@@ -218,7 +219,18 @@ public class StartActivity extends AppCompatActivity {
         switch (requestCode) {
             case REQUEST_PERMISSIONS:
                 if (MyHelper.checkPermission(PERMISSIONS, StartActivity.this) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(PERMISSIONS, REQUEST_PERMISSIONS);
+                    new PermissionDialog(StartActivity.this, new PermissionDialog.PermissionListenner() {
+                        @Override
+                        public void onDeny() {
+                            finish();
+                        }
+
+                        @Override
+                        public void onAccept() {
+                            requestPermissions(PERMISSIONS, REQUEST_PERMISSIONS);
+                        }
+                    });
+
                 }else {
                     myAsync = new MyAsync();
                     myAsync.execute();

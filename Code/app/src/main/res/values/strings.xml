@@ -21,4 +21,8 @@
     <string name="delete_file">Xóa file</string>
     <string name="show_all_file">Xem tất cả</string>
     <string name="jump_to_page">Chuyển tới trang</string>
+
+    <string name="require_permission">Bạn cần cấp các quyền đọc và ghi dữ liệu, nếu từ chối, ứng dụng này sẽ không có tác dụng</string>
+    <string name="understand">Đã hiểu</string>
+    <string name="still_cancel">Vẫn từ chối</string>
 </resources>
