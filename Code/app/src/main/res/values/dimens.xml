@@ -2,7 +2,7 @@
 <resources>
     <dimen name="text_size_medium">18sp</dimen>
     <dimen name="padding_big">8dp</dimen>
-    <dimen name="padding_medium">5dp</dimen>
+    <dimen name="padding_medium">8dp</dimen>
     <dimen name="padding_small">3dp</dimen>
 
     <dimen name="margin_medium">10dp</dimen>

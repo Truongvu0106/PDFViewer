@@ -1,51 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:layout_width="@dimen/card_width"
-    android:layout_height="@dimen/card_height">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:weightSum="2"
+    android:orientation="horizontal">
 
     <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/margin_small">
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:padding="@dimen/padding_medium">
+            android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/image_folder"
+                android:layout_width="60dp"
+                android:layout_margin="10dp"
+                android:layout_height="60dp"
+                android:src="@drawable/folder" />
 
-                <!--<ImageView-->
-                    <!--android:id="@+id/more"-->
-                    <!--android:layout_width="@dimen/icon_size_tiny"-->
-                    <!--android:layout_height="@dimen/icon_size_tiny"-->
-                    <!--android:layout_alignParentRight="true"-->
-                    <!--android:padding="@dimen/padding_medium"-->
-                    <!--android:src="@drawable/more" />-->
-
-                <ImageView
-                    android:id="@+id/image_folder"
-                    android:layout_width="@dimen/icon_width"
-                    android:layout_height="@dimen/icon_height"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/folder" />
-            </RelativeLayout>
-
-            <edu.hust.truongvu.pdfviewer.customview.MyTextView
+            <TextView
                 android:id="@+id/title_folder"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
                 android:text="abc"
-                android:textSize="@dimen/text_size_medium" />
+                android:textColor="@android:color/black"
+                android:textSize="14sp" />
         </LinearLayout>
-
     </android.support.v7.widget.CardView>
 
 </LinearLayout>

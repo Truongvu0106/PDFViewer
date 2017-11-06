@@ -1,28 +1,24 @@
 <resources>
-    <string name="app_name">PDFViewer</string>
+    <string name="app_name">PDF Viewer</string>
     <string name="dialog">Dialog</string>
-    <string name="scanning_file">Đang scan các file...</string>
-    <string name="cannot_delete">Không thể xóa file ở thẻ SD card</string>
-    <string name="cannot_share">Không thể share file từ thẻ SD card</string>
-    <string name="file_delete">Đã xóa file</string>
-    <string name="do_you_want_delete">Bạn có thực sự muốn xóa file?</string>
-    <string name="name">Tên: </string>
-    <string name="size">Kích thước: </string>
-    <string name="ok">Đồng ý</string>
-    <string name="cancel">Hủy</string>
-    <string name="please_enter_number">Hãy nhập số trang</string>
-    <string name="enter_number">Nhập số trang</string>
-    <string name="jump_to">Chuyển tới</string>
-    <string name="search">Tìm kiếm</string>
+    <string name="scanning_file">Scanning files...</string>
+    <string name="cannot_delete">Can not delete file in your SD Card</string>
+    <string name="cannot_share">Can not share file from your SD Card</string>
+    <string name="file_delete">File deleted</string>
+    <string name="do_you_want_delete">Do you really want to delete this file?</string>
+    <string name="name">Name: </string>
+    <string name="size">Size: </string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="please_enter_number">Please enter number page</string>
+    <string name="enter_number">Enter page number</string>
+    <string name="jump_to">Jump to</string>
+    <string name="search">Search</string>
 
-    <string name="switch_view">Đổi kiểu xem</string>
-    <string name="show_more_info">Xem thông tin</string>
-    <string name="share_file">Chia sẻ file</string>
-    <string name="delete_file">Xóa file</string>
-    <string name="show_all_file">Xem tất cả</string>
-    <string name="jump_to_page">Chuyển tới trang</string>
-
-    <string name="require_permission">Bạn cần cấp các quyền đọc và ghi dữ liệu, nếu từ chối, ứng dụng này sẽ không có tác dụng</string>
-    <string name="understand">Đã hiểu</string>
-    <string name="still_cancel">Vẫn từ chối</string>
+    <string name="switch_view">Switch views</string>
+    <string name="show_more_info">Show more info</string>
+    <string name="share_file">Share file</string>
+    <string name="delete_file">Delete file</string>
+    <string name="show_all_file">Show all file</string>
+    <string name="jump_to_page">Jump to page</string>
 </resources>

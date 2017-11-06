@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.hust.truongvu.pdfviewer.activity.ViewFileActivity">
+    tools:context="com.pdf.reader.pdfviewer.activity.ViewFileActivity">
+
     <com.github.barteksc.pdfviewer.PDFView
         android:id="@+id/pdf_view"
-        android:layout_margin="@dimen/margin_small"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/layout_ads"
+        android:layout_margin="@dimen/margin_small"/>
 
-    </com.github.barteksc.pdfviewer.PDFView>
-
-</LinearLayout>
+    <RelativeLayout
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/layout_ads"/>
+</RelativeLayout>

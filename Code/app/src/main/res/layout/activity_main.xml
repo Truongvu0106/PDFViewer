@@ -1,37 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="edu.hust.truongvu.pdfviewer.activity.MainActivity">
+    tools:context="com.pdf.reader.pdfviewer.activity.MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        android:id="@+id/layout_ads"></RelativeLayout>
+
+    <FrameLayout
+        android:layout_above="@+id/layout_ads"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <LinearLayout
         android:id="@+id/nodata_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
+        android:gravity="center"
+        android:orientation="horizontal"
         android:padding="@dimen/padding_big"
-        android:visibility="gone"
-        android:orientation="vertical">
+        android:visibility="visible">
+
         <ImageView
-            android:layout_width="@dimen/icon_size_nodata"
-            android:layout_height="@dimen/icon_size_nodata"
-            android:src="@drawable/nodata"/>
-        <edu.hust.truongvu.pdfviewer.customview.MyTextView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_no_data" />
+
+        <com.pdf.reader.pdfviewer.customview.MyTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No PDF found in this device"/>
+            android:layout_marginLeft="15dp"
+            android:text="No PDF found in this device" />
     </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
+        android:overScrollMode="never"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/margin_small"
-        android:layout_marginLeft="@dimen/margin_small"
-        android:layout_marginRight="@dimen/margin_small">
+        android:padding="10dp"/>
 
-    </android.support.v7.widget.RecyclerView>
-
-
-</LinearLayout>
+    </FrameLayout>
+</RelativeLayout>

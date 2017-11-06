@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PDFViewer</string>
+    <string name="app_name">Đọc file PDF</string>
     <string name="dialog">Dialog</string>
     <string name="scanning_file">Đang scan các file...</string>
     <string name="cannot_delete">Không thể xóa file ở thẻ SD card</string>

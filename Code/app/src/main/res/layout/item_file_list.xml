@@ -1,51 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:gravity="center_vertical"
-    android:layout_height="@dimen/height_item">
+    android:layout_height="wrap_content"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/margin_small">
-        <LinearLayout
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="10dp">
+
             <ImageView
                 android:id="@+id/image_pdf"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/icon_height"
-                android:src="@drawable/mypdf"
-                android:paddingTop="@dimen/padding_small"
-                android:paddingBottom="@dimen/padding_small"
-                android:layout_weight="1"/>
-            <edu.hust.truongvu.pdfviewer.customview.MyTextView
-                android:id="@+id/title_file"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_medium"
-                android:layout_gravity="center_vertical"
-                android:textSize="@dimen/text_size_medium"
-                android:layout_weight="4"
-                android:text="abc"/>
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/margin_small"
-                android:layout_weight="1">
-                <ImageView
-                    android:id="@+id/more"
-                    android:layout_width="@dimen/icon_size_tiny"
-                    android:layout_height="@dimen/icon_size_tiny"
-                    android:layout_alignParentRight="true"
-                    android:padding="@dimen/padding_big"
-                    android:src="@drawable/more"/>
-            </RelativeLayout>
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/mypdf" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/title_file"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/margin_medium"
+                android:layout_marginRight="10dp"
+                android:layout_toEndOf="@+id/image_pdf"
+                android:layout_toStartOf="@id/more"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+
+            <ImageView
+                android:id="@+id/more"
+                android:layout_width="@dimen/icon_size_tiny"
+                android:layout_height="@dimen/icon_size_tiny"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/background_icon_selector"
+                android:padding="@dimen/padding_big"
+                android:src="@drawable/ic_more" />
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
-
-</LinearLayout>
+</FrameLayout>

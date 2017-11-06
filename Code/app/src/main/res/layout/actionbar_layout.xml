@@ -13,66 +13,72 @@
         android:layout_centerVertical="true"
         android:padding="@dimen/padding_medium"
         android:src="@drawable/back"
-        android:visibility="visible"
-        android:tint="@color/text_color_white" />
+        android:tint="@color/text_color_white"
+        android:visibility="visible" />
+
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/margin_medium"
         android:layout_weight="1">
+
         <LinearLayout
             android:id="@+id/layout_search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="vertical">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <AutoCompleteTextView
                     android:id="@+id/search"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:textColor="@color/text_color_white"
-                    android:textColorHint="@color/color_grey"
-                    android:background="@android:color/transparent"
                     android:layout_marginRight="@dimen/icon_size_actionbar"
-                    android:hint="@string/search"/>
+                    android:background="@android:color/transparent"
+                    android:hint="@string/search"
+                    android:textColor="@color/text_color_white"
+                    android:textColorHint="@color/color_grey" />
+
                 <ImageView
                     android:id="@+id/clear"
                     android:layout_width="@dimen/icon_size_actionbar"
                     android:layout_height="@dimen/icon_size_actionbar"
-                    android:padding="@dimen/padding_big"
-                    android:tint="@color/color_grey"
-                    android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
-                    android:src="@drawable/cancel"/>
+                    android:layout_centerVertical="true"
+                    android:padding="@dimen/padding_big"
+                    android:src="@drawable/cancel"
+                    android:tint="@color/color_grey" />
             </RelativeLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/color_grey"/>
+                android:background="@color/color_grey" />
         </LinearLayout>
 
-        <edu.hust.truongvu.pdfviewer.customview.MyTextView
+        <com.pdf.reader.pdfviewer.customview.MyTextView
             android:id="@+id/mytitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:text="Title"
-            android:layout_gravity="center"
             android:textColor="@color/text_color_white"
             android:textSize="@dimen/text_size_medium"
-            android:visibility="visible"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="visible" />
     </FrameLayout>
 
     <ImageView
         android:id="@+id/myoption"
         android:layout_width="@dimen/icon_size_actionbar"
         android:layout_height="match_parent"
-        android:src="@drawable/more"
         android:padding="@dimen/padding_medium"
-        android:tint="@color/text_color_white"/>
+        android:src="@drawable/ic_more"
+        android:tint="@color/text_color_white" />
 </LinearLayout>
