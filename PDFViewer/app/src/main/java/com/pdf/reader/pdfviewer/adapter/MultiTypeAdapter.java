@@ -25,7 +25,7 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final int FOLDER_TYPE_LIST = 1;
     private static final int FILE_TYPE_GRID = 2;
     private static final int FOLDER_TYPE_GRID = 3;
-    private ArrayList<Object> data;
+    private ArrayList<Object> data = new ArrayList<>();
     boolean isSwitch = true;
     private Context context;
     private FileListener fileListener;

@@ -22,15 +22,17 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:padding="5dp"
                 android:src="@drawable/ic_request" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:text="Permission required"
+                android:text="@string/permission_required"
                 android:textColor="@color/colorPrimary"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <TextView
@@ -38,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="Application can't scan all pdf files in your storage. Please accept permissions for application again."
+            android:text="@string/application_can_t_scan_all_pdf_files_in_your_storage_please_accept_permissions_for_application_again"
             android:textColor="@android:color/black"
             android:textSize="14sp"
             android:textStyle="italic" />

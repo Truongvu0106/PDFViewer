@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Trình đọc file PDF</string>
+    <string name="scanning_file">Đang quét tập tin...</string>
+    <string name="cannot_delete">Không thể xóa tập tin trong thẻ nhớ</string>
+    <string name="cannot_share">Không thể chia sẻ tập tin trong thẻ nhớ</string>
+    <string name="file_delete">Tập tin đã được xóa</string>
+    <string name="do_you_want_delete">Bạn có muốn xóa tập tin này?</string>
+    <string name="please_enter_number">Vui lòng nhập số trang</string>
+    <string name="enter_number">Nhập số trang</string>
+    <string name="jump_to">Di chuyển</string>
+    <string name="search">Tìm kiếm</string>
+
+    <string name="switch_view">Thay đổi khung</string>
+    <string name="show_more_info">Thông tin</string>
+    <string name="share_file">Chia sẻ tập tin</string>
+    <string name="delete_file">Xóa tập tin</string>
+    <string name="show_all_file">Hiển thị tất cả tập tin</string>
+    <string name="jump_to_page">Di chuyển tới trang</string>
+    <string name="share_with">Chia sẻ với</string>
+    <string name="no_pdf_found_in_this_device">Không có tập tin PDF trong thiết bị</string>
+    <string name="no_page_like">Số trang không phù hợp</string>
+    <string name="file_information">Thông tin tập tin</string>
+    <string name="file_name">Tên:</string>
+    <string name="file_path">Đường dẫn:</string>
+    <string name="file_size">Kích thước:</string>
+    <string name="jump_to_special_page">Di chuyển đến trang</string>
+    <string name="rate_application">Đánh giá ứng dụng</string>
+    <string name="rate_app">Đánh giá ứng dụng</string>
+    <string name="rate_desc">Bạn có thấy hài lòng với ứng dụng không? Hãy đánh giá 5 sao để ủng hộ nhà phát triển nhé!</string>
+    <string name="later">Để sau</string>
+    <string name="rate_now">Đánh giá</string>
+    <string name="loading">Đang quét tập tin</string>
+    <string name="permission_required">Yêu cầu quyền hạn</string>
+    <string name="application_can_t_scan_all_pdf_files_in_your_storage_please_accept_permissions_for_application_again">Ứng dụng không thể truy cập tập tin của thiết bị. Hãy kích hoạt quyền đọc/ghi bộ nhớ cho ứng dụng một lần nữa.</string>
+    <string name="rescan">Quét lại</string>
+    <string name="search_file_name">Tìm kiếm tên tập tin</string>
+    <string name="cancel">Hủy bỏ</string>
+</resources>

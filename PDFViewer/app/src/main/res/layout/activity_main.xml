@@ -82,6 +82,7 @@
         <RelativeLayout
             android:id="@+id/layout_search"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:padding="10dp">
 
@@ -94,7 +95,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="30dp"
                 android:gravity="center_vertical"
-                android:hint="Search file name"
+                android:hint="@string/search_file_name"
                 android:ellipsize="start"
                 android:paddingTop="5dp"
                 android:textColor="@android:color/black"
@@ -119,7 +120,7 @@
             android:gravity="center"
             android:orientation="vertical"
             android:padding="@dimen/padding_big"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -150,7 +151,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="Rescan"
+                    android:text="@string/rescan"
                     android:textColor="@android:color/white" />
             </LinearLayout>
         </LinearLayout>
@@ -160,6 +161,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never"
-            android:paddingTop="10dp" />
+            android:paddingTop="5dp" />
     </LinearLayout>
 </RelativeLayout>

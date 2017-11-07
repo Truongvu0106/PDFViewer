@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.pdf.reader.pdfviewer.R;
 import com.pdf.reader.pdfviewer.dialogs.JumpDialog;
+import com.pdf.reader.pdfviewer.helper.Ads;
 import com.shockwave.pdfium.PdfDocument;
 
 import java.io.File;
@@ -39,6 +41,24 @@ public class ViewFileActivity extends AppCompatActivity implements OnPageChangeL
         setContentView(R.layout.activity_view_file);
 
         init();
+
+        final RelativeLayout layoutAds = (RelativeLayout) findViewById(R.id.layout_ads);
+        Ads.b(this, layoutAds, new Ads.OnAdsListener() {
+            @Override
+            public void onError() {
+                layoutAds.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAdLoaded() {
+                layoutAds.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAdOpened() {
+                layoutAds.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private void init() {
@@ -100,7 +120,7 @@ public class ViewFileActivity extends AppCompatActivity implements OnPageChangeL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.im_back:
-                finish();
+                finish();overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
                 break;
 
             case R.id.im_jump:
@@ -126,5 +146,11 @@ public class ViewFileActivity extends AppCompatActivity implements OnPageChangeL
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
     }
 }

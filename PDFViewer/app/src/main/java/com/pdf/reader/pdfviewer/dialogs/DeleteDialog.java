@@ -35,7 +35,7 @@ public class DeleteDialog extends AlertDialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.delete_dialog_view);
+        setContentView(R.layout.dialog_delete);
 
         cancel = (TextView) findViewById(R.id.cancel_delete);
         delete = (TextView) findViewById(R.id.ok_delete);

@@ -1,6 +1,8 @@
 package com.pdf.reader.pdfviewer.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +21,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +39,7 @@ import com.pdf.reader.pdfviewer.dialogs.DeleteDialog;
 import com.pdf.reader.pdfviewer.dialogs.InformationDialog;
 import com.pdf.reader.pdfviewer.dialogs.LoadingDialog;
 import com.pdf.reader.pdfviewer.entity.MyFile;
+import com.pdf.reader.pdfviewer.helper.Ads;
 import com.pdf.reader.pdfviewer.helper.MyHelper;
 import com.pdf.reader.pdfviewer.holder.FileViewHolder;
 import com.shockwave.pdfium.PdfDocument;
@@ -54,10 +59,11 @@ public class FolderActivity extends AppCompatActivity implements View.OnClickLis
 
     private ImageView imBack;
     private TextView tvFolderName;
+    private ImageView imSearch;
     private ImageView imMore;
 
     private LinearLayout layoutReScan;
-    private RelativeLayout layout_search;
+    private RelativeLayout layoutSearch;
     private EditText edtSearch;
     private ImageView imCancelSearch;
 
@@ -65,7 +71,7 @@ public class FolderActivity extends AppCompatActivity implements View.OnClickLis
     private LinearLayout layoutNoData;
 
     private ArrayList<MyFile> fileList = new ArrayList<>();
-    private ArrayList<MyFile> searchList = new ArrayList<>();
+    private ArrayList<MyFile> adapterList = new ArrayList<>();
     private ListFileAdapter adapter;
     private ArrayList<String> arrPaths = new ArrayList<>();
 
@@ -79,8 +85,9 @@ public class FolderActivity extends AppCompatActivity implements View.OnClickLis
         imBack = (ImageView) findViewById(R.id.im_back);
         tvFolderName = (TextView) findViewById(R.id.tv_folder_name);
         tvFolderName.setText(getIntent().getExtras().getString(MainActivity.FOLDER_NAME));
+        imSearch = (ImageView) findViewById(R.id.im_search);
         imMore = (ImageView) findViewById(R.id.im_more);
-        layout_search = (RelativeLayout) findViewById(R.id.layout_search);
+        layoutSearch = (RelativeLayout) findViewById(R.id.layout_search);
         edtSearch = (EditText) findViewById(R.id.edt_search);
         imCancelSearch = (ImageView) findViewById(R.id.im_cancel_search);
 
@@ -95,7 +102,6 @@ public class FolderActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         initAction();
-
 
         IntentFilter filter = new IntentFilter("com.load.file");
         mReceiver = new BroadcastReceiver() {
@@ -112,16 +118,34 @@ public class FolderActivity extends AppCompatActivity implements View.OnClickLis
             }
         };
         registerReceiver(mReceiver, filter);
+        final RelativeLayout layoutAds = (RelativeLayout) findViewById(R.id.layout_ads);
+        Ads.b(this, layoutAds, new Ads.OnAdsListener() {
+            @Override
+            public void onError() {
+                layoutAds.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAdLoaded() {
+                layoutAds.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAdOpened() {
+                layoutAds.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private void initRecyclerView() {
-        adapter = new ListFileAdapter(fileList, this, new FileViewHolder.FileListener() {
+        adapter = new ListFileAdapter(adapterList, this, new FileViewHolder.FileListener() {
             @Override
             public void onFileResult(MyFile file) {
+                Bundle animation = ActivityOptions.makeCustomAnimation(FolderActivity.this, R.anim.slide_in_left, R.anim.slide_in_right).toBundle();
                 Intent intent = new Intent(FolderActivity.this, ViewFileActivity.class);
                 File file1 = new File(file.getPath());
                 intent.putExtra(TAG, file1);
-                startActivity(intent);
+                startActivity(intent,animation);
             }
 
             @Override
@@ -130,6 +154,7 @@ public class FolderActivity extends AppCompatActivity implements View.OnClickLis
                 InformationDialog informationDialog = new InformationDialog(FolderActivity.this, file1);
                 informationDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 informationDialog.show();
+                Ads.f(FolderActivity.this);
             }
 
             @Override
@@ -151,20 +176,22 @@ public class FolderActivity extends AppCompatActivity implements View.OnClickLis
             }
 
             @Override
-            public void deleteFile(MyFile file) {
-                final File file1 = new File(file.getPath());
+            public void deleteFile(final MyFile myFile) {
+                final File file1 = new File(myFile.getPath());
                 DeleteDialog deleteDialog = new DeleteDialog(FolderActivity.this, file1, new DeleteDialog.DeleteListener() {
-                            @Override
-                            public void onDelete(File file) {
-                                if (file1.delete()) {
-                                    fileList.remove(file);
-                                    adapter.notifyDataSetChanged();
-                                    Toast.makeText(FolderActivity.this, getString(R.string.file_delete), Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(FolderActivity.this, getString(R.string.cannot_delete), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                    @Override
+                    public void onDelete(File file) {
+                        if (file1.delete()) {
+                            fileList.remove(myFile);
+                            adapterList.remove(myFile);
+                            adapter.notifyDataSetChanged();
+                            sendBroadcast(new Intent("com.load.file"));
+                            Toast.makeText(FolderActivity.this, getString(R.string.file_delete), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(FolderActivity.this, getString(R.string.cannot_delete), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
                 deleteDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 deleteDialog.show();
             }
@@ -176,168 +203,60 @@ public class FolderActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initAction() {
+        imSearch.setOnClickListener(this);
         imCancelSearch.setOnClickListener(this);
         layoutReScan.setOnClickListener(this);
         imBack.setOnClickListener(this);
         imMore.setOnClickListener(this);
-//        edtSearch.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(final CharSequence s, int start, int before, int count) {
-//                if (!s.toString().equals("")) {
-//                    new AsyncTask<Void,Void,ArrayList<MyFile>>() {
-//                        @Override
-//                        protected void onPreExecute() {
-//                            super.onPreExecute();
-//                            searchList.clear();
-//                        }
-//
-//                        @Override
-//                        protected ArrayList<MyFile> doInBackground(Void... voids) {
-//                            for (int i = 0; i < fileList.size(); i++) {
-//                                if (fileList.get(i).getName().toLowerCase().contains(s.toString().toLowerCase())) {
-//                                    searchList.add(fileList.get(i));
-//                                }
-//                            }
-//                            return null;
-//                        }
-//
-//                        @Override
-//                        protected void onPostExecute(ArrayList<MyFile> files) {
-//                            super.onPostExecute(files);
-//                            boolean isSwitched = adapter.toggleItemViewType();
-//                            adapter = new ListFileAdapter(files, FolderActivity.this, new FileViewHolder.FileListener() {
-//                                @Override
-//                                public void onFileResult(MyFile file) {
-//                                    Intent intent = new Intent(FolderActivity.this, ViewFileActivity.class);
-//                                    File file1 = new File(file.getPath());
-//                                    intent.putExtra(TAG, file1);
-//                                    startActivity(intent);
-//                                }
-//
-//                                @Override
-//                                public void onMoreInfo(MyFile file) {
-//                                    File file1 = new File(file.getPath());
-//                                    InformationDialog informationDialog = new InformationDialog(FolderActivity.this, file1);
-//                                    informationDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//                                    informationDialog.show();
-//                                }
-//
-//                                @Override
-//                                public void shareFile(MyFile file) {
-//                                    try {
-//                                        File file1 = new File(file.getPath());
-//                                        Uri contentUri = FileProvider.getUriForFile(FolderActivity.this,
-//                                                "com.pdf.reader.pdfviewer.provider", file1);
-//                                        Intent shareIntent = new Intent();
-//                                        shareIntent.setAction(Intent.ACTION_SEND);
-//                                        shareIntent.setType("application/pdf");
-//                                        shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-//                                        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//                                        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_with)));
-//                                    } catch (Exception e) {
-//                                        Toast.makeText(FolderActivity.this, getString(R.string.cannot_share), Toast.LENGTH_SHORT).show();
-//                                        e.printStackTrace();
-//                                    }
-//                                }
-//
-//                                @Override
-//                                public void deleteFile(MyFile file) {
-//                                    final File file1 = new File(file.getPath());
-//                                    DeleteDialog deleteDialog =
-//                                            new DeleteDialog(FolderActivity.this, file1, new DeleteDialog.DeleteListener() {
-//                                                @Override
-//                                                public void onDelete(File file) {
-//                                                    if (file1.delete()) {
-//                                                        fileList.remove(file);
-//                                                        adapter.notifyDataSetChanged();
-//                                                        Toast.makeText(FolderActivity.this, getString(R.string.file_delete), Toast.LENGTH_SHORT).show();
-//                                                    } else {
-//                                                        Toast.makeText(FolderActivity.this, getString(R.string.cannot_delete), Toast.LENGTH_SHORT).show();
-//                                                    }
-//                                                }
-//                                            });
-//                                    deleteDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//                                    deleteDialog.show();
-//                                }
-//                            });
-//                            recyclerView.setLayoutManager(isSwitched ? new LinearLayoutManager(FolderActivity.this) : new GridLayoutManager(FolderActivity.this, 2));
-//                            recyclerView.setHasFixedSize(true);
-//                            recyclerView.setAdapter(adapter);
-//                        }
-//                    }.execute();
-//                } else {
-//                    boolean isSwitched = adapter.toggleItemViewType();
-//                    adapter = new ListFileAdapter(fileList, FolderActivity.this, new FileViewHolder.FileListener() {
-//                        @Override
-//                        public void onFileResult(MyFile file) {
-//                            Intent intent = new Intent(FolderActivity.this, ViewFileActivity.class);
-//                            File file1 = new File(file.getPath());
-//                            intent.putExtra(TAG, file1);
-//                            startActivity(intent);
-//                        }
-//
-//                        @Override
-//                        public void onMoreInfo(MyFile file) {
-//                            File file1 = new File(file.getPath());
-//                            InformationDialog informationDialog = new InformationDialog(FolderActivity.this, file1);
-//                            informationDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//                            informationDialog.show();
-//                        }
-//
-//                        @Override
-//                        public void shareFile(MyFile file) {
-//                            try {
-//                                File file1 = new File(file.getPath());
-//                                Uri contentUri = FileProvider.getUriForFile(FolderActivity.this,
-//                                        "com.pdf.reader.pdfviewer.provider", file1);
-//                                Intent shareIntent = new Intent();
-//                                shareIntent.setAction(Intent.ACTION_SEND);
-//                                shareIntent.setType("application/pdf");
-//                                shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-//                                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//                                startActivity(Intent.createChooser(shareIntent, getString(R.string.share_with)));
-//                            } catch (Exception e) {
-//                                Toast.makeText(FolderActivity.this, getString(R.string.cannot_share), Toast.LENGTH_SHORT).show();
-//                                e.printStackTrace();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void deleteFile(MyFile file) {
-//                            final File file1 = new File(file.getPath());
-//                            DeleteDialog deleteDialog =
-//                                    new DeleteDialog(FolderActivity.this, file1, new DeleteDialog.DeleteListener() {
-//                                        @Override
-//                                        public void onDelete(File file) {
-//                                            if (file1.delete()) {
-//                                                fileList.remove(file);
-//                                                adapter.notifyDataSetChanged();
-//                                                Toast.makeText(FolderActivity.this, getString(R.string.file_delete), Toast.LENGTH_SHORT).show();
-//                                            } else {
-//                                                Toast.makeText(FolderActivity.this, getString(R.string.cannot_delete), Toast.LENGTH_SHORT).show();
-//                                            }
-//                                        }
-//                                    });
-//                            deleteDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//                            deleteDialog.show();
-//                        }
-//                    });
-//                    recyclerView.setLayoutManager(isSwitched ? new LinearLayoutManager(FolderActivity.this) : new GridLayoutManager(FolderActivity.this, 2));
-//                    recyclerView.setHasFixedSize(true);
-//                    recyclerView.setAdapter(adapter);
-//                }
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//            }
-//        });
+        edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @SuppressLint("StaticFieldLeak")
+            @Override
+            public void onTextChanged(final CharSequence s, int start, int before, int count) {
+                if (!s.toString().equals("")) {
+                    new AsyncTask<Void, Void, ArrayList<MyFile>>() {
+                        @Override
+                        protected void onPreExecute() {
+                            super.onPreExecute();
+                            adapterList.clear();
+                            adapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        protected ArrayList<MyFile> doInBackground(Void... voids) {
+                            ArrayList<MyFile> searchList = new ArrayList<>();
+                            for (int i = 0; i < fileList.size(); i++) {
+                                if (fileList.get(i).getName().toLowerCase().contains(s.toString().toLowerCase())) {
+                                    searchList.add(fileList.get(i));
+                                }
+                            }
+                            return searchList;
+                        }
+
+                        @Override
+                        protected void onPostExecute(final ArrayList<MyFile> files) {
+                            super.onPostExecute(files);
+                            adapterList.addAll(files);
+                            adapter.notifyDataSetChanged();
+                        }
+                    }.execute();
+                } else {
+                    adapterList.clear();
+                    adapter.notifyDataSetChanged();
+                    adapterList.addAll(fileList);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     private Bitmap generateImageFromPdf(Uri pdfUri) {
@@ -362,8 +281,18 @@ public class FolderActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.im_search:
+                if (layoutSearch.getVisibility() != View.VISIBLE) {
+                    layoutSearch.setVisibility(View.VISIBLE);
+                } else {
+                    edtSearch.setText("");
+                    layoutSearch.setVisibility(View.GONE);
+                }
+                break;
+
             case R.id.im_back:
                 finish();
+                overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
                 break;
 
             case R.id.im_more:
@@ -394,6 +323,14 @@ public class FolderActivity extends AppCompatActivity implements View.OnClickLis
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mReceiver != null) {
+            unregisterReceiver(mReceiver);
+        }
+        super.onDestroy();
     }
 
     private class MyAsync extends AsyncTask<Void, Void, ArrayList<MyFile>> {
@@ -443,9 +380,21 @@ public class FolderActivity extends AppCompatActivity implements View.OnClickLis
             } else {
                 layoutNoData.setVisibility(View.GONE);
                 fileList.addAll(data);
+                adapterList.addAll(fileList);
                 adapter.notifyDataSetChanged();
             }
             loadingDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (layoutSearch.getVisibility() != View.VISIBLE) {
+            super.onBackPressed();
+            overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
+        } else {
+            edtSearch.setText("");
+            layoutSearch.setVisibility(View.GONE);
         }
     }
 }

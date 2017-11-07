@@ -1,6 +1,8 @@
 package com.pdf.reader.pdfviewer.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -23,12 +25,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.pdf.reader.pdfviewer.R;
@@ -36,13 +42,17 @@ import com.pdf.reader.pdfviewer.adapter.MultiTypeAdapter;
 import com.pdf.reader.pdfviewer.dialogs.DeleteDialog;
 import com.pdf.reader.pdfviewer.dialogs.InformationDialog;
 import com.pdf.reader.pdfviewer.dialogs.LoadingDialog;
+import com.pdf.reader.pdfviewer.dialogs.RateDialog;
 import com.pdf.reader.pdfviewer.entity.MyFile;
 import com.pdf.reader.pdfviewer.entity.MyFolder;
+import com.pdf.reader.pdfviewer.helper.Ads;
 import com.pdf.reader.pdfviewer.helper.MyHelper;
 import com.pdf.reader.pdfviewer.holder.FileViewHolder;
 import com.pdf.reader.pdfviewer.holder.FolderViewHolder;
+import com.pdf.reader.pdfviewer.interfaces.RateInterface;
 import com.shockwave.pdfium.PdfDocument;
 import com.shockwave.pdfium.PdfiumCore;
+import com.zer.android.ZAndroidSDK;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -53,21 +63,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
+    private RelativeLayout layoutAds;
+
     private Toolbar appToolbar;
     private ImageView imSearch;
     private ImageView imMenu;
 
     private ArrayList<Object> fileList = new ArrayList<>();
+    private ArrayList<Object> adapterList = new ArrayList<>();
+
+    private ArrayList<MyFile> allPDF = new ArrayList<>();
     private MultiTypeAdapter adapter;
     private RecyclerView recyclerView;
 
     private LinearLayout layoutNoData;
     private LinearLayout layoutRescan;
+    private RelativeLayout layoutSearch;
+    private EditText edtSearch;
+    private ImageView imCancelSearch;
 
     public static final String TAG = "FILE";
     public static final String FOLDER_NAME = "NAME";
     public static final String FOLDER_TAG = "FOLDER";
-    public static ArrayList<MyFile> allPDF = new ArrayList<>();
 
     private BroadcastReceiver mReceiver;
 
@@ -107,9 +124,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         };
         registerReceiver(mReceiver, filter);
+
+        ZAndroidSDK.init(this);
+        Ads.b(this, layoutAds, new Ads.OnAdsListener() {
+            @Override
+            public void onError() {
+                layoutAds.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAdLoaded() {
+                layoutAds.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAdOpened() {
+                layoutAds.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private void initUI() {
+        layoutAds = (RelativeLayout) findViewById(R.id.layout_ads);
+
         appToolbar = (Toolbar) findViewById(R.id.app_toolbar);
         setSupportActionBar(appToolbar);
         imSearch = appToolbar.findViewById(R.id.im_search);
@@ -117,10 +154,70 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         layoutNoData = (LinearLayout) findViewById(R.id.layout_no_data);
         layoutRescan = (LinearLayout) findViewById(R.id.layout_rescan);
+        layoutSearch = (RelativeLayout) findViewById(R.id.layout_search);
+        edtSearch = (EditText) findViewById(R.id.edt_search);
+        imCancelSearch = (ImageView) findViewById(R.id.im_cancel_search);
 
         initFileRecyclerView();
 
+        edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @SuppressLint("StaticFieldLeak")
+            @Override
+            public void onTextChanged(final CharSequence s, int start, int before, int count) {
+                if (!s.toString().equals("")) {
+                    new AsyncTask<Void, Void, ArrayList<Object>>() {
+                        @Override
+                        protected void onPreExecute() {
+                            super.onPreExecute();
+                            adapterList.clear();
+                            adapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        protected ArrayList<Object> doInBackground(Void... voids) {
+                            ArrayList<Object> tempList = new ArrayList<>();
+                            for (int i = 0; i < fileList.size(); i++) {
+                                if (fileList.get(i) instanceof MyFolder) {
+                                    if (((MyFolder) fileList.get(i)).getName().toLowerCase().contains(s.toString().toLowerCase())) {
+                                        tempList.add(fileList.get(i));
+                                    }
+                                }
+                                if (fileList.get(i) instanceof MyFile) {
+                                    if (((MyFile) fileList.get(i)).getName().toLowerCase().contains(s.toString().toLowerCase())) {
+                                        tempList.add(fileList.get(i));
+                                    }
+                                }
+                            }
+                            return tempList;
+                        }
+
+                        @Override
+                        protected void onPostExecute(final ArrayList<Object> files) {
+                            super.onPostExecute(files);
+                            adapterList.addAll(files);
+                            adapter.notifyDataSetChanged();
+                        }
+                    }.execute();
+                } else {
+                    adapterList.clear();
+                    adapter.notifyDataSetChanged();
+                    adapterList.addAll(fileList);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         layoutRescan.setOnClickListener(this);
+        imCancelSearch.setOnClickListener(this);
     }
 
     private void initFileRecyclerView() {
@@ -128,10 +225,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fileListener = new FileViewHolder.FileListener() {
             @Override
             public void onFileResult(MyFile file) {
+                Bundle animation = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.slide_in_left, R.anim.slide_in_right).toBundle();
                 Intent intent = new Intent(MainActivity.this, ViewFileActivity.class);
                 File file1 = new File(file.getPath());
                 intent.putExtra(TAG, file1);
-                startActivity(intent);
+                startActivity(intent, animation);
+                Ads.f(MainActivity.this);
             }
 
             @Override
@@ -164,19 +263,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void deleteFile(final MyFile myfile) {
                 final File file1 = new File(myfile.getPath());
-                DeleteDialog deleteDialog =
-                        new DeleteDialog(MainActivity.this, file1, new DeleteDialog.DeleteListener() {
-                            @Override
-                            public void onDelete(File file) {
-                                if (file1.delete()) {
-                                    fileList.remove(myfile);
-                                    adapter.notifyDataSetChanged();
-                                    Toast.makeText(MainActivity.this, getString(R.string.file_delete), Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(MainActivity.this, getString(R.string.cannot_delete), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                DeleteDialog deleteDialog = new DeleteDialog(MainActivity.this, file1, new DeleteDialog.DeleteListener() {
+                    @Override
+                    public void onDelete(File file) {
+                        if (file1.delete()) {
+                            fileList.remove(myfile);
+                            adapterList.remove(myfile);
+                            adapter.notifyDataSetChanged();
+                            Toast.makeText(MainActivity.this, getString(R.string.file_delete), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, getString(R.string.cannot_delete), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
                 deleteDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 deleteDialog.show();
             }
@@ -184,6 +283,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         folderListener = new FolderViewHolder.FolderListener() {
             @Override
             public void onFolderResult(MyFolder folder) {
+                Bundle animation = ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.slide_in_left, R.anim.slide_in_right).toBundle();
                 Intent intent = new Intent(MainActivity.this, FolderActivity.class);
                 ArrayList<MyFile> myFiles = folder.getListFile();
                 ArrayList<String> path = new ArrayList<>();
@@ -195,11 +295,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 bundle.putString(FOLDER_NAME, folder.getName());
                 bundle.putStringArrayList(FOLDER_TAG, path);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                startActivity(intent, animation);
             }
         };
 
-        adapter = new MultiTypeAdapter(fileList, MainActivity.this, fileListener, folderListener);
+        adapter = new MultiTypeAdapter(adapterList, MainActivity.this, fileListener, folderListener);
         boolean isSwitched = adapter.toggleItemViewType();
         recyclerView.setLayoutManager(isSwitched ? new LinearLayoutManager(MainActivity.this) : new GridLayoutManager(MainActivity.this, 2));
         recyclerView.setAdapter(adapter);
@@ -306,6 +406,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    public void onBackPressed() {
+        if (layoutSearch.getVisibility() != View.VISIBLE) {
+            RateDialog rateDialog = new RateDialog(MainActivity.this, new RateInterface() {
+                @Override
+                public void cancelClicked() {
+                    finish();
+                    overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
+                }
+
+                @Override
+                public void rateClicked() {
+                    finish();
+                    overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
+                    MyHelper.rateApp(MainActivity.this);
+                }
+            });
+            rateDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            rateDialog.show();
+        } else {
+            edtSearch.setText("");
+            layoutSearch.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         if (mReceiver != null) {
             unregisterReceiver(mReceiver);
@@ -317,7 +442,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.im_search:
-
+                if (layoutSearch.getVisibility() != View.VISIBLE) {
+                    layoutSearch.setVisibility(View.VISIBLE);
+                } else {
+                    edtSearch.setText("");
+                    layoutSearch.setVisibility(View.GONE);
+                }
                 break;
 
             case R.id.im_menu:
@@ -334,6 +464,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if (item.getItemId() == R.id.rate_app) {
                             MyHelper.rateApp(MainActivity.this);
                         }
+                        if (item.getItemId() == R.id.menu_rescan) {
+                            new LoadPDF().execute();
+                        }
                         return true;
                     }
                 });
@@ -342,6 +475,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.layout_rescan:
                 new LoadPDF().execute();
+                break;
+
+            case R.id.im_cancel_search:
+                edtSearch.setText("");
                 break;
 
             default:
@@ -365,6 +502,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             loadingDialog.show();
             try {
                 fileList.clear();
+                adapterList.clear();
                 adapter.notifyDataSetChanged();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -399,6 +537,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             layoutNoData.setVisibility(View.GONE);
             fileList.addAll(data);
+            adapterList.addAll(fileList);
             adapter.notifyDataSetChanged();
             loadingDialog.dismiss();
             sendBroadcast(new Intent("com.finish.splash"));

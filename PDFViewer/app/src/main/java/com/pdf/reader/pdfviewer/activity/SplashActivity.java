@@ -47,6 +47,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_in_right);
             }
         };
         registerReceiver(mReceiver, new IntentFilter("com.finish.splash"));
@@ -67,6 +68,7 @@ public class SplashActivity extends AppCompatActivity {
                             @Override
                             public void cancelClicked() {
                                 finish();
+                                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_in_right);
                                 sendBroadcast(new Intent("com.finish.app"));
                             }
 
