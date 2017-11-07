@@ -14,10 +14,17 @@
         android:supportsRtl="true"
         android:largeHeap="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.pdf.reader.pdfviewer.activity.MainActivity"/>
+        <meta-data
+            android:name="metadata"
+            android:value="truongpdfviewer" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="4242000" />
+
+        <activity android:name="com.pdf.reader.pdfviewer.activity.FolderActivity"/>
         <activity android:name="com.pdf.reader.pdfviewer.activity.ViewFileActivity" />
         <activity android:name="com.pdf.reader.pdfviewer.activity.SplashActivity" />
-        <activity android:name="com.pdf.reader.pdfviewer.activity.StartActivity" >
+        <activity android:name="com.pdf.reader.pdfviewer.activity.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

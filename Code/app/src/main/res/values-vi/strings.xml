@@ -22,4 +22,13 @@
     <string name="delete_file">Xóa file</string>
     <string name="show_all_file">Xem tất cả</string>
     <string name="jump_to_page">Chuyển tới trang</string>
+    <string name="share_with">Share with</string>
+    <string name="no_pdf_found_in_this_device">No PDF found in this device</string>
+    <string name="no_page_like">No page like in this document</string>
+    <string name="file_information">File Information</string>
+    <string name="file_name">File name:</string>
+    <string name="file_path">File path:</string>
+    <string name="file_size">File size:</string>
+    <string name="jump_to_special_page">Jump to special page</string>
+    <string name="rate_application">Rate application</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.pdf.reader.pdfviewer.dialogs;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pdf.reader.pdfviewer.R;
@@ -16,20 +18,20 @@ import com.pdf.reader.pdfviewer.R;
  * Created by truon on 10/20/2017.
  */
 
-public class JumpDialog extends AlertDialog {
+public class JumpDialog extends Dialog {
     private Context context;
     private JumpListener listener;
 
-    private Button btnJump, btnCancel;
+    private TextView btnJump, btnCancel;
     private EditText editText;
 
     public interface JumpListener {
         void onJump(int numPage);
     }
 
-    public JumpDialog(@NonNull Context context, Context context1, JumpListener listener) {
+    public JumpDialog(@NonNull Context context, JumpListener listener) {
         super(context);
-        this.context = context1;
+        this.context = context;
         this.listener = listener;
     }
 
@@ -37,8 +39,8 @@ public class JumpDialog extends AlertDialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_jump_page);
-        btnJump = (Button)findViewById(R.id.btn_jump);
-        btnCancel = (Button)findViewById(R.id.btn_cancel);
+        btnJump = (TextView)findViewById(R.id.btn_jump);
+        btnCancel = (TextView)findViewById(R.id.btn_cancel);
         editText = (EditText) findViewById(R.id.edt_page_number);
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -61,13 +63,5 @@ public class JumpDialog extends AlertDialog {
                 }
             }
         });
-    }
-
-    public JumpDialog(@NonNull final Context context, final JumpListener listener) {
-        super(context);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        this.setContentView(R.layout.dialog_jump_page);
-
-        show();
     }
 }

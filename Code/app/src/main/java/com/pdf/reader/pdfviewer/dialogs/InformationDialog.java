@@ -18,14 +18,13 @@ import com.pdf.reader.pdfviewer.R;
  * Created by truon on 10/20/2017.
  */
 
-public class InfomationDialog extends AlertDialog {
+public class InformationDialog extends AlertDialog {
     private TextView tvName, tvPath, tvSize;
     private TextView btnOk;
 
     private File file;
 
-
-    public InfomationDialog(@NonNull Context context, File file) {
+    public InformationDialog(@NonNull Context context, File file) {
         super(context);
         this.file = file;
     }

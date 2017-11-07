@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:orientation="horizontal"
-    android:weightSum="2">
+    android:orientation="horizontal">
 
     <android.support.v7.widget.CardView
         android:layout_width="170dp"
@@ -25,18 +24,28 @@
                     android:id="@+id/more"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:background="@drawable/background_icon_selector"
                     android:padding="8dp"
                     android:src="@drawable/ic_more" />
 
-                <ImageView
-                    android:id="@+id/image_pdf"
+                <FrameLayout
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_centerInParent="true"
-                    android:layout_margin="10dp"
-                    android:src="@drawable/mypdf" />
+                    android:layout_margin="10dp">
+
+                    <ImageView
+                        android:id="@+id/image_pdf"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/ic_my_pdf" />
+
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/background_file" />
+                </FrameLayout>
             </RelativeLayout>
 
             <com.pdf.reader.pdfviewer.customview.MyTextView
@@ -46,7 +55,6 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="5dp"
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="1"
@@ -54,7 +62,5 @@
                 android:textColor="@android:color/black"
                 android:textSize="14sp" />
         </LinearLayout>
-
     </android.support.v7.widget.CardView>
-
 </LinearLayout>

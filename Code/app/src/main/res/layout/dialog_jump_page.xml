@@ -21,19 +21,21 @@
 
             <ImageView
                 android:layout_width="30dp"
+                android:padding="5dp"
                 android:layout_height="30dp"
                 android:src="@drawable/ic_jump_to" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:text="Jump to special page"
+                android:layout_marginLeft="10dp"
+                android:textStyle="bold"
+                android:text="@string/jump_to_special_page"
                 android:textColor="@color/colorPrimary"
                 android:textSize="16sp" />
         </LinearLayout>
 
-        <FrameLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_marginTop="10dp"
             android:layout_height="wrap_content">
@@ -42,7 +44,7 @@
                 android:background="@drawable/background_edit_text"
                 android:id="@+id/edt_page_number"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:paddingRight="10dp"
                 android:paddingLeft="10dp"
                 android:paddingTop="5dp"
@@ -50,7 +52,12 @@
                 android:textSize="16sp"
                 android:hint="@string/enter_number"
                 android:inputType="number" />
-        </FrameLayout>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"/>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

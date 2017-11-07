@@ -1,38 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:layout_height="wrap_content">
+    android:paddingRight="10dp">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_small">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:orientation="horizontal">
+            android:padding="10dp">
 
             <ImageView
-                android:id="@+id/image_folder"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:paddingBottom="@dimen/padding_small"
-                android:paddingTop="@dimen/padding_small"
+                android:id="@+id/im_folder"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
                 android:src="@drawable/folder" />
 
-            <com.pdf.reader.pdfviewer.customview.MyTextView
+            <TextView
                 android:id="@+id/title_folder"
                 android:layout_width="match_parent"
-                android:maxLines="2"
-                android:ellipsize="end"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/margin_medium"
+                android:layout_marginRight="@dimen/margin_medium"
+                android:layout_toEndOf="@+id/im_folder"
+                android:layout_toStartOf="@+id/im_next"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@android:color/black"
                 android:textSize="16sp" />
-        </LinearLayout>
+
+            <ImageView
+                android:id="@+id/im_next"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:padding="8dp"
+                android:src="@drawable/ic_next" />
+        </RelativeLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>

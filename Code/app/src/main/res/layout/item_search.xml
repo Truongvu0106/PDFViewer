@@ -16,7 +16,7 @@
             android:layout_weight="1"
             android:paddingBottom="@dimen/padding_small"
             android:paddingTop="@dimen/padding_small"
-            android:src="@drawable/mypdf" />
+            android:src="@drawable/ic_my_pdf" />
 
         <com.pdf.reader.pdfviewer.customview.MyTextView
             android:id="@+id/title_search"

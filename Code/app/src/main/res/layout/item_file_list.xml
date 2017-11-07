@@ -16,11 +16,22 @@
             android:orientation="horizontal"
             android:padding="10dp">
 
-            <ImageView
-                android:id="@+id/image_pdf"
+            <FrameLayout
+                android:id="@+id/frame_image"
                 android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/mypdf" />
+                android:layout_height="50dp">
+
+                <ImageView
+                    android:id="@+id/image_pdf"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/ic_my_pdf" />
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/background_file" />
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/title_file"
@@ -30,7 +41,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/margin_medium"
                 android:layout_marginRight="10dp"
-                android:layout_toEndOf="@+id/image_pdf"
+                android:layout_toEndOf="@+id/frame_image"
                 android:layout_toStartOf="@id/more"
                 android:ellipsize="end"
                 android:maxLines="2"
